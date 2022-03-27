@@ -4,13 +4,13 @@ import "fmt"
 
 func main() {
 	cards := newDeck()
-	cards.print()
+	//cards.print()
 
 	cards.shuffle()
 
-	fmt.Println("===========================================")
-
 	cards.print()
+
+	fmt.Println("===========================================")
 	//cards.saveToFile("Cards.txt")
 
 }
