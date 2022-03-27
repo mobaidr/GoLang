@@ -1,11 +1,16 @@
 package main
 
-func main() {
-	//cards := newDeck()
+import "fmt"
 
+func main() {
+	cards := newDeck()
+	cards.print()
+
+	cards.shuffle()
+
+	fmt.Println("===========================================")
+
+	cards.print()
 	//cards.saveToFile("Cards.txt")
 
-	newDeck := newDeckFrom("Cards.txt")
-
-	newDeck.print()
 }
