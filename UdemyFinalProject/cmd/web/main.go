@@ -2,21 +2,29 @@ package main
 
 import (
 	"database/sql"
-	"log"
-	"os"
-	"time"
+	"github.com/alexedwards/scs"
+	"github.com/alexedwards/scs/redisstore"
+	_ "github.com/alexedwards/scs/redisstore"
+	_ "github.com/alexedwards/scs/v2"
+	"github.com/gomodule/redigo/redis"
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v4"
 	_ "github.com/jackc/pgx/v4/stdlib"
+	"log"
+	"net/http"
+	"os"
+	"time"
 )
 
 const webPort = "80"
+
 func main() {
 	// Connect to a database
 	db := initDB()
 	db.Ping()
 
 	// Create sessions
+	session := initSession()
 
 	// Create some channels
 
@@ -27,6 +35,29 @@ func main() {
 	// setup mail
 
 	// listen for web connections
+}
+
+func initSession() *scs.SessionManager {
+	//set up session
+	session := scs.New()
+	session.Store = redisstore.New(initRedis())
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = true
+
+	return session
+}
+
+func initRedis() *redis.Pool {
+	redisPool := &redis.Pool{
+		MaxIdle: 10,
+		Dial: func() (redis.Conn, error) {
+			return redis.Dial("tcp", os.Getenv("REDIS"))
+		},
+	}
+
+	return redisPool
 }
 
 func initDB() *sql.DB {
@@ -40,7 +71,7 @@ func initDB() *sql.DB {
 	return conn
 }
 
-func connectToDatabase() *sql.DB  {
+func connectToDatabase() *sql.DB {
 	counts := 0
 
 	dsn := os.Getenv("DSN")

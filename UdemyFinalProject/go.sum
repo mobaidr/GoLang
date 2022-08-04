@@ -1,6 +1,7 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
 github.com/alexedwards/scs v1.4.1 h1:/5L5a07IlqApODcEfZyMsu8Smd1S7Q4nBjEyKxIRTp0=
+github.com/alexedwards/scs v1.4.1/go.mod h1:JRIFiXthhMSivuGbxpzUa0/hT5rz2hpyw61Bmd+S1bg=
 github.com/alexedwards/scs/redisstore v0.0.0-20220528130143-d93ace5be94b h1:mzKWZjeWjfJ6TLW7VWNu/28Clt+xHvhuf1xF/pcekvA=
 github.com/alexedwards/scs/redisstore v0.0.0-20220528130143-d93ace5be94b/go.mod h1:ceKFatoD+hfHWWeHOAYue1J+XgOJjE7dw8l3JtIRTGY=
 github.com/alexedwards/scs/v2 v2.5.0 h1:zgxOfNFmiJyXG7UPIuw1g2b9LWBeRLh3PjfB9BDmfL4=
