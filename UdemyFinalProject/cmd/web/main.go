@@ -13,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -21,17 +22,27 @@ const webPort = "80"
 func main() {
 	// Connect to a database
 	db := initDB()
-	db.Ping()
 
 	// Create sessions
 	session := initSession()
 
+	//Create Logger
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
 	// Create some channels
 
 	// create Wait group
+	wg := sync.WaitGroup{}
 
 	// set up application config
-
+	app := Config{
+		Session:  session,
+		DB:       db,
+		InfoLog:  infoLog,
+		ErrorLog: errorLog,
+		Wait:     &wg,
+	}
 	// setup mail
 
 	// listen for web connections
