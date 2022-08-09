@@ -2,10 +2,9 @@ package main
 
 import (
 	"database/sql"
-	"github.com/alexedwards/scs"
+	"fmt"
 	"github.com/alexedwards/scs/redisstore"
-	_ "github.com/alexedwards/scs/redisstore"
-	_ "github.com/alexedwards/scs/v2"
+	"github.com/alexedwards/scs/v2"
 	"github.com/gomodule/redigo/redis"
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v4"
@@ -46,6 +45,23 @@ func main() {
 	// setup mail
 
 	// listen for web connections
+	app.serve()
+}
+
+func (app *Config) serve() {
+	// start http server
+	srv := &http.Server{
+		Addr:    fmt.Sprintf(":%s", webPort),
+		Handler: app.Routes(),
+	}
+
+	app.InfoLog.Println("Starting Server...")
+
+	err := srv.ListenAndServe()
+
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 func initSession() *scs.SessionManager {
