@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"finalproject/data"
 	"fmt"
 	"github.com/alexedwards/scs/redisstore"
 	"github.com/alexedwards/scs/v2"
@@ -43,6 +44,7 @@ func main() {
 		InfoLog:  infoLog,
 		ErrorLog: errorLog,
 		Wait:     &wg,
+		Models:   data.New(db),
 	}
 	// setup mail
 
