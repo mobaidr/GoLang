@@ -12,7 +12,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 	"time"
 )
 
@@ -43,6 +45,9 @@ func main() {
 		Wait:     &wg,
 	}
 	// setup mail
+
+	// listen to signals
+	go app.listenForShutDown()
 
 	// listen for web connections
 	app.serve()
@@ -139,4 +144,23 @@ func openDB(dsn string) (*sql.DB, error) {
 	}
 
 	return db, nil
+}
+
+func (app *Config) listenForShutDown() {
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	app.shutdown()
+
+	os.Exit(0)
+}
+
+func (app *Config) shutdown() {
+	//Perform any clean up.
+	app.InfoLog.Println("would run cleanup task")
+
+	app.Wait.Wait()
+
+	app.InfoLog.Println("Closing Channels & Shutdown application ...")
 }
