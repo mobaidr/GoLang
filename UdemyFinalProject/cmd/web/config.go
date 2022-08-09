@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"github.com/alexedwards/scs"
+	"github.com/alexedwards/scs/v2"
 	"log"
 	"sync"
 )
