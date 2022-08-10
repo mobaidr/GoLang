@@ -126,7 +126,7 @@ func (m *Mail) BuildHTMLMessage(msg Message) (string, error) {
 func (m *Mail) BuildPlainTextMessage(msg Message) (string, error) {
 	templateToRender := fmt.Sprintf("./cmd/web/templates/%s.plain.gohtml", msg.Template)
 
-	t, err := template.New("emai-plain").ParseFiles(templateToRender)
+	t, err := template.New("email-plain").ParseFiles(templateToRender)
 
 	if err != nil {
 		return "", err
@@ -139,7 +139,6 @@ func (m *Mail) BuildPlainTextMessage(msg Message) (string, error) {
 	}
 
 	formattedMessage := tpl.String()
-	formattedMessage, err = m.inlineCSS(formattedMessage)
 
 	if err != nil {
 		return "", err
