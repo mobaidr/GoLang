@@ -173,7 +173,7 @@ func (app *Config) ChooseSubscription(w http.ResponseWriter, r *http.Request) {
 	dataMap := make(map[string]interface{})
 	dataMap["plans"] = plans
 
-	app.render(w, r, "plans.gohtml", &TemplateData{
+	app.render(w, r, "plans.page.gohtml", &TemplateData{
 		DataMap: dataMap,
 	})
 }
