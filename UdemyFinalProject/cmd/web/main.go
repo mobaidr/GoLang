@@ -189,14 +189,14 @@ func (app *Config) shutdown() {
 
 	app.Wait.Wait()
 
-	app.Mailer.DoneChan <- true
+	app.Mailer.MailerDoneChan <- true
 	app.ErrorChanDone <- true
 
 	app.InfoLog.Println("Closing Channels & Shutdown application ...")
 
 	close(app.Mailer.MailerChan)
 	close(app.Mailer.ErrorChan)
-	close(app.Mailer.DoneChan)
+	close(app.Mailer.MailerDoneChan)
 	close(app.ErrorChan)
 	close(app.ErrorChanDone)
 }
@@ -208,16 +208,16 @@ func (app *Config) createMail() Mail {
 	doneChan := make(chan bool)
 
 	m := Mail{
-		Domain:      "localhost",
-		Host:        "localhost",
-		Port:        1025,
-		Encryption:  "none",
-		FromAddress: "info@mycompany.com",
-		FromName:    "Info",
-		Wait:        app.Wait,
-		MailerChan:  mailerChan,
-		ErrorChan:   errorChan,
-		DoneChan:    doneChan,
+		Domain:         "localhost",
+		Host:           "localhost",
+		Port:           1025,
+		Encryption:     "none",
+		FromAddress:    "info@mycompany.com",
+		FromName:       "Info",
+		Wait:           app.Wait,
+		MailerChan:     mailerChan,
+		ErrorChan:      errorChan,
+		MailerDoneChan: doneChan,
 	}
 
 	return m

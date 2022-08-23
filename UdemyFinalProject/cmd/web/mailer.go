@@ -11,18 +11,18 @@ import (
 )
 
 type Mail struct {
-	Domain      string
-	Host        string
-	Port        int
-	Username    string
-	Password    string
-	Encryption  string
-	FromAddress string
-	FromName    string
-	Wait        *sync.WaitGroup
-	MailerChan  chan Message
-	ErrorChan   chan error
-	DoneChan    chan bool
+	Domain         string
+	Host           string
+	Port           int
+	Username       string
+	Password       string
+	Encryption     string
+	FromAddress    string
+	FromName       string
+	Wait           *sync.WaitGroup
+	MailerChan     chan Message
+	ErrorChan      chan error
+	MailerDoneChan chan bool
 }
 
 type Message struct {
@@ -50,7 +50,7 @@ func (app *Config) listenForMail() {
 			{
 				app.ErrorLog.Println(err)
 			}
-		case <-app.Mailer.DoneChan:
+		case <-app.Mailer.MailerDoneChan:
 			{
 				return
 			}
