@@ -166,7 +166,11 @@ func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 
 	// Get the ID of the plan that is chosen
 	id := r.URL.Query().Get("id")
-	planId, _ := strconv.Atoi(id)
+	planId, err := strconv.Atoi(id)
+
+	if err != nil {
+		app.ErrorLog.Println("Error getting planid", err)
+	}
 
 	// Get the plan from Database
 	plan, err := app.Models.Plan.GetOne(planId)
@@ -232,6 +236,22 @@ func (app *Config) SubscribeToPlan(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	//subscribe the user to account
+	err = app.Models.Plan.SubscribeUserToPlan(user, *plan)
+	if err != nil {
+		app.Session.Put(r.Context(), "error", "Error subscribing to plan.")
+		http.Redirect(w, r, "/members/plans", http.StatusSeeOther)
+		return
+	}
+
+	// Update the user in the session.
+	u, err := app.Models.User.GetOne(user.ID)
+	if err != nil {
+		app.Session.Put(r.Context(), "error", "Error getting user from database.")
+		http.Redirect(w, r, "/members/plans", http.StatusSeeOther)
+		return
+	}
+
+	app.Session.Put(r.Context(), "user", u)
 
 	// redirect
 	app.Session.Put(r.Context(), "flash", "Subscribed")
@@ -258,12 +278,13 @@ func (app *Config) generateManual(u data.User, p *data.Plan) *gofpdf.Fpdf {
 
 	pdf.MultiCell(0, 4, fmt.Sprintf("%s %s", u.FirstName, u.LastName), "", "C", false)
 	pdf.Ln(5)
-	pdf.MultiCell(0, 4, fmt.Sprintf("%s User Guide"), "", "C", false)
+	pdf.MultiCell(0, 4, fmt.Sprintf("%s User Guide", p.PlanName), "", "C", false)
 
 	return pdf
 }
 
 func (app *Config) getInvoice(user data.User, plan *data.Plan) (string, error) {
+	app.InfoLog.Println("Amount is ", plan.PlanAmountFormatted)
 	return plan.PlanAmountFormatted, nil
 }
 
