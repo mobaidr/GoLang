@@ -157,6 +157,21 @@ func (app *Config) ActivateAccount(w http.ResponseWriter, r *http.Request) {
 	//send an email with an invoice attached.
 }
 
+func (app *Config) SubscribeToPlan(writer http.ResponseWriter, request *http.Request) {
+
+	// Get the ID of the plan that is choosen
+	// Get the plan from Database
+	// Get the user from the session
+	// generate an invoice
+	// send an email with invoice attached.
+	// generate a manual.
+	// send an email with the manual attached.
+
+	//subscribe the user to account
+
+	// redirect
+}
+
 func (app *Config) ChooseSubscription(w http.ResponseWriter, r *http.Request) {
 
 	if !app.Session.Exists(r.Context(), "userID") {
@@ -177,3 +192,5 @@ func (app *Config) ChooseSubscription(w http.ResponseWriter, r *http.Request) {
 		DataMap: dataMap,
 	})
 }
+
+

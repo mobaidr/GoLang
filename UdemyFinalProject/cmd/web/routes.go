@@ -27,5 +27,7 @@ func (app *Config) Routes() http.Handler {
 
 	mux.Get("/plans", app.ChooseSubscription)
 
+	mux.Get("/subscribe", app.SubscribeToPlan)
+
 	return mux
 }
