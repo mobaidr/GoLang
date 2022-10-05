@@ -8,6 +8,7 @@
 *.so
 *.dylib
 *.xml
+.DS_Store
 
 # Test binary, built with `go test -c`
 *.test
@@ -23,3 +24,7 @@ go.work
 
 */.idea
 UdemyFinalProject/db-data/
+UdemyFinalProject/tmp
+microservices/project/db-data/
+
+
