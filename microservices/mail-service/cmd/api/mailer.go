@@ -75,10 +75,9 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 	email := mail.NewMSG()
 	email.SetFrom(msg.From).
 		AddTo(msg.To).
-		SetSubject(msg.Subject)
-
-	email.SetBody(mail.TextPlain, plainMessage)
-	email.AddAlternative(mail.TextHTML, formattedMessage)
+		SetSubject(msg.Subject).
+		SetBody(mail.TextPlain, plainMessage).
+		AddAlternative(mail.TextHTML, formattedMessage)
 
 	if len(msg.Attachments) > 0 {
 		for _, x := range msg.Attachments {
@@ -96,7 +95,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 }
 
 func (m *Mail) buildPlainTextMessage(msg Message) (string, error) {
-	templateToRender := "./templates/mail.plain.gohtml"
+	templateToRender := "../templates/mail.plain.gohtml"
 
 	t, err := template.New("email-plain").ParseFiles(templateToRender)
 
@@ -116,7 +115,7 @@ func (m *Mail) buildPlainTextMessage(msg Message) (string, error) {
 }
 
 func (m *Mail) buildHTMLMessage(msg Message) (string, error) {
-	templateToRender := "./templates/mail.html.gohtml"
+	templateToRender := "../templates/mail.html.gohtml"
 
 	t, err := template.New("email-html").ParseFiles(templateToRender)
 
