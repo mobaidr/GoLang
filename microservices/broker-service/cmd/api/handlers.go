@@ -12,7 +12,7 @@ type RequestPayload struct {
 	Action string      `json:"action"`
 	Auth   AuthPayload `json:"auth,omitempty"`
 	Log    LogPayload  `json:"log,omitempty"`
-	Mail   MailPayload `json:"mail:omitempty"`
+	Mail   MailPayload `json:"mail,omitempty"`
 }
 
 type MailPayload struct {
@@ -178,7 +178,7 @@ func (app *Config) sendMail(w http.ResponseWriter, msg MailPayload) {
 
 	request.Header.Set("Content-Type","application/json")
 
-	client := http.Client{}
+	client := &http.Client{}
 
 	response, err := client.Do(request)
 
