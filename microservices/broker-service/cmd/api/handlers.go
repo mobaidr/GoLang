@@ -12,12 +12,12 @@ type RequestPayload struct {
 	Action string      `json:"action"`
 	Auth   AuthPayload `json:"auth,omitempty"`
 	Log    LogPayload  `json:"log,omitempty"`
-	Mail   MailPayload `json:"mail,omitempty"`
+	Mail   MailPayload `json:"mail:omitempty"`
 }
 
 type MailPayload struct {
-	From string `json:"from"`
-	To string `json:"to"`
+	From    string `json:"from"`
+	To      string `json:"to"`
 	Subject string `json:"subject"`
 	Message string `json:"message"`
 }
@@ -178,7 +178,7 @@ func (app *Config) sendMail(w http.ResponseWriter, msg MailPayload) {
 
 	request.Header.Set("Content-Type","application/json")
 
-	client := &http.Client{}
+	client := http.Client{}
 
 	response, err := client.Do(request)
 
@@ -201,5 +201,6 @@ func (app *Config) sendMail(w http.ResponseWriter, msg MailPayload) {
 	payload.Error = false
 	payload.Message = "Message sent to : " + msg.To
 
-	app.writeJSON(w, http.StatusAccepted, payload)
+	app.writeJSON((w, http.StatusAccepted, payload))
+
 }
