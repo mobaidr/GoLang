@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/pkg/errors"
@@ -12,7 +13,7 @@ type RequestPayload struct {
 	Action string      `json:"action"`
 	Auth   AuthPayload `json:"auth,omitempty"`
 	Log    LogPayload  `json:"log,omitempty"`
-	Mail   MailPayload `json:"mail:omitempty"`
+	Mail   MailPayload `json:"mail,omitempty"`
 }
 
 type MailPayload struct {
@@ -46,6 +47,9 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 
 	err := app.readJSON(w, r, &requestPayload)
 
+	log.Println("RequestPayload")
+	log.Printf("%+v \n", requestPayload)
+
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -60,7 +64,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		{
 			app.logItem(w, requestPayload.Log)
 		}
-	case "mail" :
+	case "mail":
 		{
 			app.sendMail(w, requestPayload.Mail)
 		}
@@ -163,20 +167,25 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload) {
 }
 
 func (app *Config) sendMail(w http.ResponseWriter, msg MailPayload) {
-	jsonData, _ := json.MarshalIndent(msg,"","\t")
+	log.Printf(
+		"%+v\n",
+		msg,
+	)
+
+	jsonData, _ := json.MarshalIndent(msg, "", "\t")
 
 	//call the mail service
 	mailServiceUrl := "http://mail-service/send"
 
 	// post to mail service...
-	request, err := http.NewRequest("POST", mailServiceUrl,bytes.NewBuffer(jsonData))
+	request, err := http.NewRequest("POST", mailServiceUrl, bytes.NewBuffer(jsonData))
 
 	if err != nil {
 		app.errorJSON(w, err)
 		return
 	}
 
-	request.Header.Set("Content-Type","application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	client := http.Client{}
 
@@ -201,6 +210,5 @@ func (app *Config) sendMail(w http.ResponseWriter, msg MailPayload) {
 	payload.Error = false
 	payload.Message = "Message sent to : " + msg.To
 
-	app.writeJSON((w, http.StatusAccepted, payload))
-
+	app.writeJSON(w, http.StatusAccepted, payload)
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"html/template"
+	"log"
 	"time"
 
 	"github.com/vanng822/go-premailer/premailer"
@@ -54,6 +55,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 	plainMessage, err := m.buildPlainTextMessage(msg)
 
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -69,6 +71,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 
 	smtpClient, err := server.Connect()
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -88,6 +91,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 	err = email.Send(smtpClient)
 
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -95,7 +99,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 }
 
 func (m *Mail) buildPlainTextMessage(msg Message) (string, error) {
-	templateToRender := "../templates/mail.plain.gohtml"
+	templateToRender := "./templates/mail.plain.gohtml"
 
 	t, err := template.New("email-plain").ParseFiles(templateToRender)
 
