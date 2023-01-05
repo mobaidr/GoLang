@@ -3,33 +3,25 @@ package event
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	amqp "github.com/rabbitmq/amqp091-go"
+	"log"
 	"net/http"
 )
 
-package event
-
-import (
-"bytes"
-"encoding/json"
-"fmt"
-amqp "github.com/rabbitmq/amqp091-go"
-"log"
-"net/http"
-)
-
 type Consumer struct {
-	conn *amqp.Connection
+	conn      *amqp.Connection
 	queueName string
 }
 
 func NewConsumer(conn *amqp.Connection) (Consumer, error) {
-	consumer := Consumer {
+	consumer := Consumer{
 		conn: conn,
 	}
 
-	err:= consumer.setup()
+	err := consumer.setup()
 
-	if err!=nil {
+	if err != nil {
 		return Consumer{}, err
 	}
 
