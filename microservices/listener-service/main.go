@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
+	"listener/event"
 	"log"
 	"math"
 	"os"
@@ -19,13 +20,24 @@ func main() {
 	}
 
 	defer rabbitCon.Close()
-	log.Println("Connected to RabbitMQ")
+
 
 	// start Listening for messages.
+	log.Println("Listening for and consuming RabbitMQ Messages....")
 
 	// Create a consumer
+	consumer, err := event.NewConsumer(rabbitCon)
+
+	if err != nil {
+		panic(err)
+	}
 
 	// watch the queue  and consume events
+	err = consumer.Listen([]string{"log.INFO", "log.WARNING", "log.ERROR"})
+
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func connect() (*amqp.Connection, error) {
@@ -41,6 +53,7 @@ func connect() (*amqp.Connection, error) {
 			fmt.Println("Rabbit MQ is not ready")
 			counts++
 		} else {
+			log.Println("Connected to RabbitMQ")
 			connection = c
 			break
 		}
