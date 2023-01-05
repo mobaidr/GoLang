@@ -46,6 +46,8 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    depends_on:
+      - mongo
 
   authentication-service:
     build:
