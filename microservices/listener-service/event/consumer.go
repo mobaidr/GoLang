@@ -128,6 +128,6 @@ func handlePayload(payload Payload) {
 	}
 }
 
-func logEvent(payload Payload) {
-	
+func logEvent(payload Payload) error {
+
 }
