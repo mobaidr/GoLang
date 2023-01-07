@@ -7,9 +7,12 @@ import (
 	"time"
 )
 
+//RPCServer is the type of our RPC server. Methods that take this as a receiver are available
+// over RPC, as long as they are exported.
 type RPCServer struct {
 }
 
+//RPCPayload is the type for data that we receive from RPC.
 type RPCPayload struct {
 	Name string
 	Data string
