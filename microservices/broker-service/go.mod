@@ -8,4 +8,5 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rabbitmq/amqp091-go v1.5.0 // indirect
 	google.golang.org/grpc v1.51.0 // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
 )
