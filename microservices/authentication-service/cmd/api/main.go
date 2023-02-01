@@ -19,6 +19,7 @@ var counts int64
 
 type Config struct {
 	Repo data.Repository
+	Client *http.Client
 }
 
 func main() {
@@ -33,7 +34,10 @@ func main() {
 
 	// Set app config
 	app := Config{
+		Client: &http.Client{},
 	}
+
+	app.setupRepo(conn)
 
 	srv := http.Server{
 		Addr: fmt.Sprintf(":%s", webPort),
