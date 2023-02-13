@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 var SECRET = []byte("super-secret-auth-key")
@@ -15,7 +16,7 @@ func CreateJWT() (string, error) {
 
 	claims := token.Claims.(jwt.MapClaims)
 
-	claims["exp"] = time.Now().Add(time.Hour).Unix()
+	claims["exp"] = time.Now().Add(time.Minute).Unix()
 
 	tokenStr, err := token.SignedString(SECRET)
 
