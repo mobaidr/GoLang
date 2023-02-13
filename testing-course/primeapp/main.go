@@ -18,15 +18,15 @@ func isPrime(n int) (bool, string) {
 	}
 
 	if n < 0 {
-		return false, fmt.Sprintf("%d, Negative numbers are not prime by definition!", n)
+		return false, fmt.Sprintf("%d, Negative number are not prime by definition!", n)
 	}
 
-	// use the modulus opearter repeatedly to see if we have a prime number
+	// use the modulus operator repeatedly to see if we have a prime number
 	for i := 2; i <= n/2; i++ {
 		if n%i == 0 {
-			return false, fmt.Sprintf("%d is not a prime number because it is divisible by %d", n, i)
+			return false, fmt.Sprintf("%d is not a prime because it is divisible by %d!", n, i)
 		}
 	}
 
-	return true, fmt.Sprintf("%d is a prime number!!!", n)
+	return true, fmt.Sprintf("%d is a prime number!", n)
 }
