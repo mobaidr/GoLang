@@ -69,7 +69,7 @@ func intro() {
 	fmt.Println("Is it Prime ?")
 	fmt.Println("=============")
 
-	fmt.Println("Enter a whole and we will tell you if it is a prime number or not. Enter q to quit")
+	fmt.Println("Enter a whole number and we will tell you if it is a prime number or not. Enter q to quit")
 
 	prompt()
 }
