@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io"
+	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -57,7 +57,8 @@ func Test_prompt(t *testing.T) {
 	os.Stdout = oldOut
 
 	// read the output of our prompt from read pipe
-	out, _ := io.ReadAll(r)
+	out, _ := ioutil.ReadAll(r)
+
 
 	if string(out) != "==>" {
 		t.Errorf("incorrect prompt: expected ==> but got %s", string(out))
@@ -83,7 +84,7 @@ func Test_intro(t *testing.T) {
 	os.Stdout = oldOut
 
 	// read the output of our prompt from read pipe
-	out, _ := io.ReadAll(r)
+	out, _ := ioutil.ReadAll(r)
 
 	if !strings.Contains(string(out), "Enter a whole number") {
 		t.Errorf("Intro text not correct; got %s", string(out))
