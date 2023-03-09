@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -9,17 +10,17 @@ import (
 )
 
 func Test_isPrime(t *testing.T) {
-	primeTests := []struct{
-		name string
-		testNum int
+	primeTests := []struct {
+		name     string
+		testNum  int
 		expected bool
-		msg string
+		msg      string
 	}{
-		{"prime", 7,true,"7 is a prime number!"},
-		{"not prime", 8,false,"8 is not a prime because it is divisible by 2!"},
-		{"zero", 0,false,"0 is not prime, by definition!"},
-		{"one", 1,false,"1 is not prime, by definition!"},
-		{"negative", -23,false,"-23, Negative number are not prime by definition!"},
+		{"prime", 7, true, "7 is a prime number!"},
+		{"not prime", 8, false, "8 is not a prime because it is divisible by 2!"},
+		{"zero", 0, false, "0 is not prime, by definition!"},
+		{"one", 1, false, "1 is not prime, by definition!"},
+		{"negative", -23, false, "-23, Negative number are not prime by definition!"},
 	}
 
 	for _, e := range primeTests {
@@ -44,7 +45,7 @@ func Test_prompt(t *testing.T) {
 	oldOut := os.Stdout
 
 	//Create a read & write pipe
-	r,w,_  := os.Pipe()
+	r, w, _ := os.Pipe()
 
 	//Set os.stdOut to our write pipe.
 	os.Stdout = w
@@ -60,7 +61,6 @@ func Test_prompt(t *testing.T) {
 	// read the output of our prompt from read pipe
 	out, _ := ioutil.ReadAll(r)
 
-
 	if string(out) != "==>" {
 		t.Errorf("incorrect prompt: expected ==> but got %s", string(out))
 	}
@@ -71,7 +71,7 @@ func Test_intro(t *testing.T) {
 	oldOut := os.Stdout
 
 	//Create a read & write pipe
-	r,w,_  := os.Pipe()
+	r, w, _ := os.Pipe()
 
 	//Set os.stdOut to our write pipe.
 	os.Stdout = w
@@ -94,20 +94,20 @@ func Test_intro(t *testing.T) {
 
 func Test_checknumbers(t *testing.T) {
 	tests := []struct {
-		name  string
-		input string
+		name     string
+		input    string
 		expected string
-	} {
-		{ name:"empty", input: "", expected: "Please enter a whole number !!"},
-		{ name:"zero", input: "0", expected: "0 is not prime, by definition!"},
-		{ name:"one", input: "1", expected: "1 is not prime, by definition!"},
-		{ name:"seven", input: "7", expected: "7 is a prime number!"},
-		{ name:"Negative Number", input: "-7", expected: "-7, Negative number are not prime by definition!"},
-		{ name:"Typed", input: "three", expected: "Please enter a whole number !!"},
-		{ name:"Typed", input: "three", expected: "Please enter a whole number !!"},
-		{ name:"Decimal", input: "2.13", expected: "Please enter a whole number !!"},
-		{ name:"Quite", input: "q", expected: ""},
-		{ name:"QUITE", input: "Q", expected: ""},
+	}{
+		{name: "empty", input: "", expected: "Please enter a whole number !!"},
+		{name: "zero", input: "0", expected: "0 is not prime, by definition!"},
+		{name: "one", input: "1", expected: "1 is not prime, by definition!"},
+		{name: "seven", input: "7", expected: "7 is a prime number!"},
+		{name: "Negative Number", input: "-7", expected: "-7, Negative number are not prime by definition!"},
+		{name: "Typed", input: "three", expected: "Please enter a whole number !!"},
+		{name: "Typed", input: "three", expected: "Please enter a whole number !!"},
+		{name: "Decimal", input: "2.13", expected: "Please enter a whole number !!"},
+		{name: "Quite", input: "q", expected: ""},
+		{name: "QUITE", input: "Q", expected: ""},
 	}
 
 	for _, e := range tests {
@@ -121,4 +121,21 @@ func Test_checknumbers(t *testing.T) {
 			t.Errorf("%s: expected %s, but got %s", e.name, e.expected, res)
 		}
 	}
+}
+
+func Test_readUserInput(t *testing.T) {
+	// to test this function we need a channel
+	// And also need an instance io.Reader.
+
+	doneChan := make(chan bool)
+
+	//create a reference to bytes.buffer
+	var stdIn bytes.Buffer
+
+	stdIn.Write([]byte("1\nq\n"))
+
+	go readUserInput(&stdIn, doneChan)
+
+	<-doneChan
+	close(doneChan)
 }
