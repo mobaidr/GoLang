@@ -3,7 +3,10 @@ package main
 import (
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
+
+	"golang.org/x/net/context"
 )
 
 func Test_application_addIPToContext(t *testing.T) {
@@ -59,5 +62,19 @@ func Test_application_addIPToContext(t *testing.T) {
 		}
 
 		handlerToTest.ServeHTTP(httptest.NewRecorder(), req)
+	}
+}
+
+func Test_application_ipFomrContext(t *testing.T) {
+	var app application
+
+	ctx := context.Background()
+
+	ctx = context.WithValue(ctx, contextUserKey, "whatever")
+
+	ip := app.ipFromContext(ctx)
+
+	if !strings.EqualFold("whatever", ip) {
+		t.Error("Wrong Value returned from Context")
 	}
 }
