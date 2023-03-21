@@ -8,12 +8,13 @@ type User struct {
 }
 
 func main() {
-	InformOrderShipped(User{Name: "Mohammed O Rahman", Phone: "9581055556"}, "12334")
+	d := Dispatcher{}
+	InformOrderShipped(User{Name: "Amena Rahman", Phone: "1232343344"},"223344", d)
 }
 
-func InformOrderShipped(receiver User, orderID string) bool {
+func InformOrderShipped(receiver User, orderID string, sender Sender) bool {
 	message := fmt.Sprintf("Your order #%s is shipped", orderID)
-	err := send(receiver,message)
+	err := sender.Send(receiver,message)
 
 	if err != nil {
 		return false
