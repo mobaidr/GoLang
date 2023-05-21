@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  web:
+    image: golanddebuggingwithdockercompose-web
+    container_name: dockerdev
+    build: ./
+    ports:
+      - "8000:8000"
+    environment:
+      DD_DB_HOST: db
+    command: /server
+    depends_on:
+      - db
+
+  db:
+    container_name: dockerdev-db
+    image: postgres:14.1-alpine
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: obaid
+      POSTGRES_PASSWORD: obaid
+      POSTGRES_DB: obaid
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
